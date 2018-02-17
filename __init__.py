@@ -13,7 +13,8 @@ from os import environ, path
 import pyaudio
 from pocketsphinx.pocketsphinx import *
 from sphinxbase.sphinxbase import *
-
+import sys
+from websocket import create_connection
 
 __author__ = 'tjoen'
 
@@ -45,6 +46,19 @@ class LsttSkill(MycroftSkill):
             require("LsttKeyword").build()
         self.register_intent(lstt_intent, self.handle_lstt_intent)
 
+    def wsnotify(self, msg):
+        uri = 'ws://localhost:8181/core'
+        ws = create_connection(uri)
+        print "Sending " + msg + " to " + uri + "..."
+        data = "{}"
+        message = '{"type": "' + msg + '", "data": ' + data +'}'
+        result = ws.send(message)
+        print "Receiving..."
+        result =  ws.recv()
+        print "Received '%s'" % result
+        ws.close()
+ 
+
     def handle_record_begin(self):
         LOGGER.info("Lsst - Begin Recording...") 
         # If enabled, play a wave file with a short sound to audibly
@@ -54,11 +68,11 @@ class LsttSkill(MycroftSkill):
                 config.get('sounds').get('start_listening'))
             if file:
                 play_wav(file)
-        #ws.emit(Message('recognizer_loop:record_begin'))
+        self.wsnotify('recognizer_loop:record_begin')
 
     def handle_record_end(self):
         LOGGER.info("Lsst - End Recording...")
-        #ws.emit(Message('recognizer_loop:record_end'))
+        self.wsnotify('recognizer_loop:record_end')
 
     def runpocketsphinx(self):
         self.speak("starting local speech client")
@@ -103,7 +117,7 @@ class LsttSkill(MycroftSkill):
                             p.terminate()
                             self.stop()
                             #selection()
-                        #    break
+                            break
             else:
                 break
         decoder.end_utt()
