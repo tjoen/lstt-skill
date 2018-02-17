@@ -6,7 +6,7 @@ from mycroft.audio import wait_while_speaking
 from mycroft.configuration import ConfigurationManager
 from mycroft.util import play_wav, resolve_resource_file
 from mycroft.util.log import getLogger
-import subprocess
+from subprocess import call
 from ctypes import *
 from contextlib import contextmanager
 from os import environ, path
@@ -112,6 +112,7 @@ class LsttSkill(MycroftSkill):
 
 
     def stop(self):
+        #call('sudo service mycroft-speech-client start')
         #cmd_output = subprocess.check_output(['sudo', 'service', 'mycroft-speech-client', 'start']) 
         #cmd_output = cmd_output.decode('utf-8').strip('\n\r')
         #logger.info("Starting Speechclient"+ cmd_output )
@@ -119,6 +120,7 @@ class LsttSkill(MycroftSkill):
 
     def handle_lstt_intent(self, message):
         #stop speech-client
+        #call('sudo service mycroft-speech-client stop')
         #cmd_output = subprocess.check_output(['sudo', 'service', 'mycroft-speech-client', 'stop']) 
         #cmd_output = cmd_output.decode('utf-8').strip('\n\r')
         #LOGGER.info("Stopping Speechclient"+ cmd_output )
