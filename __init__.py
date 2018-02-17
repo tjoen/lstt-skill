@@ -52,7 +52,7 @@ class LsttSkill(MycroftSkill):
         logger.info("Stopping Speechclient"+ cmd_output )
         runpocketsphinx()
 
-    def runpocketsphinx()
+    def runpocketsphinx():
         self.speak("starting local speech client")
         wait_while_speaking()
         HOMEDIR = '/home/pi/'
