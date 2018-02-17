@@ -1,4 +1,4 @@
-﻿from os.path import dirname
+from os.path import dirname
 from mycroft.skills.core import MycroftSkill
 from mycroft.skills.core import intent_handler, intent_file_handler
 from adapt.intent import IntentBuilder
@@ -15,10 +15,43 @@ from pocketsphinx.pocketsphinx import *
 from sphinxbase.sphinxbase import *
 import sys
 from websocket import create_connection
+import requests
+import json
+import random
+import time
+from HTMLParser import HTMLParser
 
 __author__ = 'tjoen'
 
 LOGGER = getLogger(__name__)
+
+validmc = [ '1', '2', '3', '4']
+score = 0
+mychoice = {
+'ONE': one,
+'TWO': two,
+'THREE': three,
+'FOUR': four,
+'FIVE': invalid,
+'SIX': invalid,
+'SEVEN': invalid,
+'EIGHT': invalid,
+'NINE': invalid,
+'TEN': invalid,
+'REPEAT': repeat,
+'STOP': stop,
+'PAUZE': pauze,
+'END': stop,
+'START': start,
+'QUIT': stop,
+'NEVER': invalid,
+'MIND': invalid,
+'HELP': help,
+'PLAY': start,
+'YES': yes,
+'NO': no
+}
+
 config = ConfigurationManager.get()
 ERROR_HANDLER_FUNC = CFUNCTYPE(None, c_char_p, c_int, c_char_p, c_int, c_char_p)
 
@@ -34,7 +67,6 @@ def noalsaerr():
     yield
     asound.snd_lib_error_set_handler(None)
 
-
 class LsttSkill(MycroftSkill):
     def __init__(self):
         super(LsttSkill, self).__init__(name="LsttSkill")
@@ -44,6 +76,46 @@ class LsttSkill(MycroftSkill):
 	lstt_intent = IntentBuilder("LsttIntent").\
             require("LsttKeyword").build()
         self.register_intent(lstt_intent, self.handle_lstt_intent)
+	
+    def one():
+        return "1"
+    
+    def two():
+        print "2"
+    
+    def three():
+        print "3"
+    
+    def four():
+        print "4"
+    
+    def invalid():
+        print "5 or more"
+    
+    def repeat():
+        print "repeat"
+    
+    #def stop():
+    #    print "stop"
+    #    exit()
+    
+    def pauze():
+        print "pauze"
+    
+    def cancel():
+        print "cancel"
+
+    def help():
+        print "help"
+    
+    def start():
+        print "start"
+	
+    def yes():
+        print "start"
+	
+    def no():
+        print "start"
 
     def wsnotify(self, msg):
         uri = 'ws://localhost:8181/core'
@@ -120,6 +192,87 @@ class LsttSkill(MycroftSkill):
                 break
         decoder.end_utt()
 
+    def play(self, filename):
+        play_wav( self.settings.get('resdir')+filename )
+    
+    def score(self, point):
+        global score
+        score = score+point
+        self.enclosure.mouth_text( "SCORE: "+str(score) )
+        return
+
+    def wrong(self, right_answer):
+        self.enclosure.mouth_text( "WRONG!" )
+        self.speak_dialog("incorrect")
+        wait_while_speaking()
+        self.play( 'false.wav' )
+        self.speak("The answer is "+right_answer)
+        wait_while_speaking()
+        return
+
+    def right(self):
+        self.enclosure.mouth_text( "CORRECT!" )
+        self.speak_dialog("correct")
+        wait_while_speaking()
+        self.play( 'true.wav' )
+        self.score(1)
+        return    
+
+    def preparequestion(self, category, question, answers, right_answer):
+        self.enclosure.activate_mouth_events()
+        self.enclosure.mouth_reset()
+        h = HTMLParser()
+        quest = h.unescape( question )
+        time.sleep(1.5)
+        self.speak("The category is "+ category+ ". " + quest )
+        wait_while_speaking()
+        correct_answer = h.unescape( right_answer )
+        allanswers = list()
+        allanswers.append(h.unescape(right_answer))
+        for a in answers:
+            allanswers.append(h.unescape(a))
+        random.shuffle(allanswers)
+        self.settings['cat'] = category
+        self.settings['question'] = quest
+        self.settings['answers'] = allanswers
+        self.settings['correct_answer'] = correct_answer
+        self.askquestion( category, quest, allanswers, correct_answer )
+    
+    def repeatquestion(self, category, question, answers, right_answer):
+        time.sleep(1)
+        self.speak("The category is "+category+". "+ question )
+        wait_while_speaking()
+        i=0
+        ans = ""
+        for a in answers:
+            i = i + 1
+            self.speak(str(i) + ".    " + a)
+            wait_while_speaking()
+        #ans = ans+("|"+str(i)+"|"+a)
+        #self.enclosure.mouth_text( ans )
+        self.getinput()
+        return
+
+    def askquestion( self, category, quest, allanswers, correct_answer):
+        i=0
+        ans = ""
+        for a in allanswers:
+            i = i + 1
+            self.speak(str(i) + ".    " + a)
+            wait_while_speaking()
+            #ans = ans+("|"+str(i)+">"+a)
+        #self.enclosure.mouth_text( ans )
+        self.getinput()
+        response = self.settings.get('myanswer')
+        self.speak("Your choice is "+ str(response))
+        wait_while_speaking()
+        self.enclosure.deactivate_mouth_events()
+        if correct_answer == allanswers[int(response)-1]:
+            self.right()
+        else:
+            self.wrong(correct_answer)
+        return 
+	
     def stop(self):
         command = 'service mycroft-speech-client start'.split()
         p = Popen(['sudo', '-S'] + command, stdin=PIPE, stderr=PIPE, universal_newlines=True)
