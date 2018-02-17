@@ -45,13 +45,7 @@ class LsttSkill(MycroftSkill):
             require("LsttKeyword").build()
         self.register_intent(lstt_intent, self.handle_lstt_intent)
 
-    def handle_lstt_intent(self, message):
-        #stop speech-client
-        #cmd_output = subprocess.check_output(['sudo', 'service', 'mycroft-speech-client', 'stop']) 
-        #cmd_output = cmd_output.decode('utf-8').strip('\n\r')
-        #logger.info("Stopping Speechclient"+ cmd_output )
-        #runpocketsphinx()
-#    def runpocketsphinx()
+    def runpocketsphinx()
         self.speak("starting local speech client")
         wait_while_speaking()
         HOMEDIR = '/home/pi/'
@@ -120,6 +114,13 @@ class LsttSkill(MycroftSkill):
         #cmd_output = cmd_output.decode('utf-8').strip('\n\r')
         #logger.info("Starting Speechclient"+ cmd_output )
         pass
+
+    def handle_lstt_intent(self, message):
+        #stop speech-client
+        #cmd_output = subprocess.check_output(['sudo', 'service', 'mycroft-speech-client', 'stop']) 
+        #cmd_output = cmd_output.decode('utf-8').strip('\n\r')
+        logger.info("Stopping Speechclient"+ cmd_output )
+        runpocketsphinx()
 
 def create_skill():
       return LsttSkill()
