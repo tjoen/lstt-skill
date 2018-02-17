@@ -6,7 +6,7 @@ from mycroft.audio import wait_while_speaking
 from mycroft.configuration import ConfigurationManager
 from mycroft.util import play_wav, resolve_resource_file
 from mycroft.util.log import getLogger
-from subprocess import call
+from subprocess import Popen, PIPE
 from ctypes import *
 from contextlib import contextmanager
 from os import environ, path
@@ -40,7 +40,6 @@ class LsttSkill(MycroftSkill):
         super(LsttSkill, self).__init__(name="LsttSkill")
         LOGGER.info("Starting Lstt")
 
-
     def initialize(self):
 	lstt_intent = IntentBuilder("LsttIntent").\
             require("LsttKeyword").build()
@@ -57,7 +56,6 @@ class LsttSkill(MycroftSkill):
         result =  ws.recv()
         print "Received '%s'" % result
         ws.close()
- 
 
     def handle_record_begin(self):
         LOGGER.info("Lsst - Begin Recording...") 
@@ -101,19 +99,19 @@ class LsttSkill(MycroftSkill):
                     in_speech_bf = decoder.get_in_speech()
                     if not in_speech_bf:
                         decoder.end_utt()
-                        print 'Result:', decoder.hyp().hypstr
+                        #print 'Result:', decoder.hyp().hypstr
                         utt = decoder.hyp().hypstr
                         decoder.start_utt()
                         if utt.strip() != '':
+                            self.handle_record_end()
                             #print utt.strip()
                             reply = utt.strip().split(None, 1)[0]
-                            self.speak( reply )
+                            self.speak( "you said " + reply )
                             wait_while_speaking()
-                            print(reply)
+                            #print(reply)
                             #selection = mychoice[reply]
                             stream.stop_stream()
                             stream.close()
-                            self.handle_record_end()
                             p.terminate()
                             self.stop()
                             #selection()
@@ -122,21 +120,16 @@ class LsttSkill(MycroftSkill):
                 break
         decoder.end_utt()
 
-
-
     def stop(self):
-        #call('sudo service mycroft-speech-client start')
-        #cmd_output = subprocess.check_output(['sudo', 'service', 'mycroft-speech-client', 'start']) 
-        #cmd_output = cmd_output.decode('utf-8').strip('\n\r')
-        #logger.info("Starting Speechclient"+ cmd_output )
+        command = 'service mycroft-speech-client start'.split()
+        p = Popen(['sudo', '-S'] + command, stdin=PIPE, stderr=PIPE, universal_newlines=True)
+        LOGGER.info("Starting speech-client" )
         pass
 
     def handle_lstt_intent(self, message):
-        #stop speech-client
-        #call('sudo service mycroft-speech-client stop')
-        #cmd_output = subprocess.check_output(['sudo', 'service', 'mycroft-speech-client', 'stop']) 
-        #cmd_output = cmd_output.decode('utf-8').strip('\n\r')
-        #LOGGER.info("Stopping Speechclient"+ cmd_output )
+        command = 'service mycroft-speech-client start'.split()
+        p = Popen(['sudo', '-S'] + command, stdin=PIPE, stderr=PIPE, universal_newlines=True)
+        LOGGER.info("Stopping speech-client")
         self.runpocketsphinx()
 
 def create_skill():
