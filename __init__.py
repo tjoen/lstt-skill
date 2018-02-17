@@ -47,12 +47,11 @@ class LsttSkill(MycroftSkill):
 
     def handle_lstt_intent(self, message):
         #stop speech-client
-        cmd_output = subprocess.check_output(['sudo', 'service', 'mycroft-speech-client', 'stop']) 
-        cmd_output = cmd_output.decode('utf-8').strip('\n\r')
-        logger.info("Stopping Speechclient"+ cmd_output )
-        runpocketsphinx()
-
-    def runpocketsphinx():
+        #cmd_output = subprocess.check_output(['sudo', 'service', 'mycroft-speech-client', 'stop']) 
+        #cmd_output = cmd_output.decode('utf-8').strip('\n\r')
+        #logger.info("Stopping Speechclient"+ cmd_output )
+        #runpocketsphinx()
+#    def runpocketsphinx()
         self.speak("starting local speech client")
         wait_while_speaking()
         HOMEDIR = '/home/pi/'
@@ -94,7 +93,7 @@ class LsttSkill(MycroftSkill):
                             handle_record_end()
                             p.terminate()
                             pygame.quit()
-                            self.stop() 
+                            #self.stop() 
                             #selection()
                         #    break
             else:
@@ -117,9 +116,9 @@ class LsttSkill(MycroftSkill):
         #ws.emit(Message('recognizer_loop:record_end'))
 
     def stop(self):
-        cmd_output = subprocess.check_output(['sudo', 'service', 'mycroft-speech-client', 'start']) 
-        cmd_output = cmd_output.decode('utf-8').strip('\n\r')
-        logger.info("Starting Speechclient"+ cmd_output )
+        #cmd_output = subprocess.check_output(['sudo', 'service', 'mycroft-speech-client', 'start']) 
+        #cmd_output = cmd_output.decode('utf-8').strip('\n\r')
+        #logger.info("Starting Speechclient"+ cmd_output )
         pass
 
 def create_skill():
