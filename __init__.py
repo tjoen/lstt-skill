@@ -95,7 +95,7 @@ class LsttSkill(MycroftSkill):
         decoder.end_utt()
 
     def handle_record_begin():
-        logger.info("Begin Recording...") 
+        LOGGER.info("Begin Recording...") 
         # If enabled, play a wave file with a short sound to audibly
         # indicate recording has begun.
         if config.get('confirm_listening'):
@@ -106,7 +106,7 @@ class LsttSkill(MycroftSkill):
         #ws.emit(Message('recognizer_loop:record_begin'))
 
     def handle_record_end():
-        logger.info("End Recording...")
+        LOGGER.info("End Recording...")
         #ws.emit(Message('recognizer_loop:record_end'))
 
     def stop(self):
