@@ -45,7 +45,7 @@ class LsttSkill(MycroftSkill):
             require("LsttKeyword").build()
         self.register_intent(lstt_intent, self.handle_lstt_intent)
 
-    def runpocketsphinx()
+    def runpocketsphinx():
         self.speak("starting local speech client")
         wait_while_speaking()
         HOMEDIR = '/home/pi/'
