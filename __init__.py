@@ -45,7 +45,7 @@ class LsttSkill(MycroftSkill):
             require("LsttKeyword").build()
         self.register_intent(lstt_intent, self.handle_lstt_intent)
 
-    def runpocketsphinx():
+    def runpocketsphinx(self):
         self.speak("starting local speech client")
         wait_while_speaking()
         HOMEDIR = '/home/pi/'
@@ -60,7 +60,7 @@ class LsttSkill(MycroftSkill):
             p = pyaudio.PyAudio()
         stream = p.open(format=pyaudio.paInt16, channels=1, rate=16000, input=True, frames_per_buffer=1024)
         stream.start_stream()
-        handle_record_begin()
+        self.handle_record_begin()
       
         in_speech_bf = False
         decoder.start_utt()
@@ -84,7 +84,7 @@ class LsttSkill(MycroftSkill):
                             #selection = mychoice[reply]
                             stream.stop_stream()
                             stream.close()
-                            handle_record_end()
+                            self.handle_record_end()
                             p.terminate()
                             pygame.quit()
                             #self.stop() 
@@ -94,7 +94,7 @@ class LsttSkill(MycroftSkill):
                 break
         decoder.end_utt()
 
-    def handle_record_begin():
+    def handle_record_begin(self):
         LOGGER.info("Begin Recording...") 
         # If enabled, play a wave file with a short sound to audibly
         # indicate recording has begun.
@@ -105,7 +105,7 @@ class LsttSkill(MycroftSkill):
                 play_wav(file)
         #ws.emit(Message('recognizer_loop:record_begin'))
 
-    def handle_record_end():
+    def handle_record_end(self):
         LOGGER.info("End Recording...")
         #ws.emit(Message('recognizer_loop:record_end'))
 
@@ -120,7 +120,7 @@ class LsttSkill(MycroftSkill):
         #cmd_output = subprocess.check_output(['sudo', 'service', 'mycroft-speech-client', 'stop']) 
         #cmd_output = cmd_output.decode('utf-8').strip('\n\r')
         #LOGGER.info("Stopping Speechclient"+ cmd_output )
-        runpocketsphinx()
+        self.runpocketsphinx
 
 def create_skill():
       return LsttSkill()
