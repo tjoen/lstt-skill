@@ -119,7 +119,7 @@ class LsttSkill(MycroftSkill):
         #stop speech-client
         #cmd_output = subprocess.check_output(['sudo', 'service', 'mycroft-speech-client', 'stop']) 
         #cmd_output = cmd_output.decode('utf-8').strip('\n\r')
-        LOGGER.info("Stopping Speechclient"+ cmd_output )
+        #LOGGER.info("Stopping Speechclient"+ cmd_output )
         runpocketsphinx()
 
 def create_skill():
