@@ -56,13 +56,16 @@ class LsttSkill(MycroftSkill):
 	
     def invalid(self):
         self.speak("I did not understand you.")
+        wait_while_speaking()
 	p = self.runpocketsphinx("Please choose 1, 2, 3 or 4.", False, validmc)
+        self.settings['myanswer'] = p
         return p
 	
     def repeat(self):
         self.speak('I will repeat the question')
         wait_while_speaking()
         p = self.repeatquestion( self.settings.get('cat'), self.settings.get('question'), self.settings.get('answers'), self.settings.get('correct_answer'))
+        self.settings['myanswer'] = p
         return p
 
     def askstop(self):
@@ -71,6 +74,7 @@ class LsttSkill(MycroftSkill):
 	    self.endgame()
 	else:
 	    p= self.runpocketsphinx("Choose 1,2,3 or 4", False, validmc)
+            self.settings['myanswer'] = p
             return p
 	
     def help(self):
@@ -83,6 +87,7 @@ class LsttSkill(MycroftSkill):
 	    self.handle_trivia_intent()
 	else:
 	    p = self.runpocketsphinx("Choose 1,2,3 or 4", False, validmc)
+            self.settings['myanswer'] = p
             return p
 	
     def mychoice(self, x):
@@ -183,6 +188,7 @@ class LsttSkill(MycroftSkill):
 	                    selection = self.mychoice(reply)
                             if selection in arr:
                                 # Do the thing
+                                self.settings['myanswer'] = selection
                                 return selection
                             elif selection == 'repeat':
                                 self.repeat()
@@ -256,9 +262,9 @@ class LsttSkill(MycroftSkill):
             self.speak(str(i) + ".    " + a)
             wait_while_speaking()
         response = self.runpocketsphinx("Choose 1,2,3 or 4.", False, validmc)
-        #response = self.settings.get('myanswer')
-        self.speak("Your choice is "+ str(response))
-        return
+        # response = self.settings.get('myanswer')
+        # self.speak("Your choice is "+ str(response))
+        return response
 
     def askquestion( self, category, quest, allanswers, correct_answer):
         i=0
@@ -268,8 +274,8 @@ class LsttSkill(MycroftSkill):
             self.speak(str(i) + ".    " + a)
             wait_while_speaking()
         response = self.runpocketsphinx("Choose 1,2,3 or 4.", False, validmc)
-        #response = self.settings.get('myanswer')
-        self.speak("Your choice is "+ str(response))
+        response2 = self.settings.get('myanswer')
+        self.speak("Your choice is "+ str(response2))
         wait_while_speaking()
         self.enclosure.deactivate_mouth_events()
         if correct_answer == allanswers[int(response)-1]:
