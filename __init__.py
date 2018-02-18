@@ -79,7 +79,7 @@ class LsttSkill(MycroftSkill):
 
     def start(self):
 	response = self.runpocketsphinx("Would you like to restart?", False, yesno)
-	if response == yes:
+	if response == 'yes':
 	    self.handle_trivia_intent()
 	else:
 	    p = self.runpocketsphinx("Choose 1,2,3 or 4", False, validmc)
