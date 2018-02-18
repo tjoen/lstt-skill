@@ -5,7 +5,7 @@ This skill starts a game of general trivia.
 At the moment, the skill will ask you 5 questions. You can answer by choosing 1,2,3 or 4.
 Yes, No, Stop, Repeat and Start should also work.
 
-This has uses mycrofts HMM from pocketsphinx STT with a small dict.
+This testskill uses mycrofts pocketsphinx STT with a small dict.
 
 Copy localstt.dic	and localstt.lm to your homedir from here: https://github.com/tjoen/local-stt-test
 
