@@ -232,8 +232,7 @@ class LsttSkill(MycroftSkill):
         return    
 
     def preparequestion(self, category, question, answers, right_answer):
-        #self.enclosure.activate_mouth_events()
-        #self.enclosure.mouth_reset()
+        self.enclosure.deactivate_mouth_events()
         h = HTMLParser()
         quest = h.unescape( question )
         self.enclosure.mouth_text( quest )
@@ -287,7 +286,7 @@ class LsttSkill(MycroftSkill):
         return 
 
     def endgame(self):
-        #self.enclosure.deactivate_mouth_events()
+        self.enclosure.deactivate_mouth_events()
         self.play( 'end.wav' )
         self.enclosure.mouth_text( "SCORE: "+str(score) )
         self.speak("You answered " +str(score)+ " questions correct")
@@ -318,7 +317,7 @@ class LsttSkill(MycroftSkill):
         self.speak("Okay, lets play a game of trivia. Get ready!")
         wait_while_speaking()
         for f in questions:
-            #self.enclosure.activate_mouth_events()
+            self.enclosure.deactivate_mouth_events()
             #self.enclosure.mouth_reset()
             self.preparequestion( f['category'], f['question'], f['incorrect_answers'], f['correct_answer'])
         self.endgame()
