@@ -147,6 +147,11 @@ class LsttSkill(MycroftSkill):
         self.wsnotify('recognizer_loop:record_end')
 
     def runpocketsphinx(self, msg, speakchoice, arr):
+        while self.settings.get('running'):
+            time.sleep(0.5)
+            if not self.settings.get('running'):
+                break
+
         self.speak(msg)
         wait_while_speaking()
         HOMEDIR = '/home/pi/'
@@ -244,6 +249,7 @@ class LsttSkill(MycroftSkill):
         for a in answers:
             allanswers.append(h.unescape(a))
         random.shuffle(allanswers)
+        self.settings['running'] = True
         self.settings['cat'] = category
         self.settings['question'] = quest
         self.settings['answers'] = allanswers
@@ -252,7 +258,7 @@ class LsttSkill(MycroftSkill):
     
     def repeatquestion(self, category, question, answers, right_answer):
         time.sleep(1)
-        self.speak("The category is "+category+". "+ question )
+        self.speak( question )
         wait_while_speaking()
         i=0
         ans = ""
@@ -260,6 +266,7 @@ class LsttSkill(MycroftSkill):
             i = i + 1
             self.speak(str(i) + ".    " + a)
             wait_while_speaking()
+        self.settings['running'] = False
         response = self.runpocketsphinx("Choose 1,2,3 or 4.", False, validmc)
         # response = self.settings.get('myanswer')
         # self.speak("Your choice is "+ str(response))
@@ -272,6 +279,7 @@ class LsttSkill(MycroftSkill):
             i = i + 1
             self.speak(str(i) + ".    " + a)
             wait_while_speaking()
+        self.settings['running'] = False
         response = self.runpocketsphinx("Choose 1,2,3 or 4.", False, validmc)
         response2 = self.settings.get('myanswer')
         self.speak("Your choice is "+ str(response2))
