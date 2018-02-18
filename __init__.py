@@ -97,31 +97,6 @@ class LsttSkill(MycroftSkill):
     def no():
         return "no"
 
-mychoice = {
-'ONE': one,
-'TWO': two,
-'THREE': three,
-'FOUR': four,
-'FIVE': invalid,
-'SIX': invalid,
-'SEVEN': invalid,
-'EIGHT': invalid,
-'NINE': invalid,
-'TEN': invalid,
-'REPEAT': repeat,
-'STOP': askstop,
-'PAUZE': askstop,
-'END': askstop,
-'START': start,
-'QUIT': askstop,
-'NEVER': invalid,
-'MIND': invalid,
-'HELP': help,
-'PLAY': start,
-'YES': yes,
-'NO': no
-}
-
     def wsnotify(self, msg):
         uri = 'ws://localhost:8181/core'
         ws = create_connection(uri)
@@ -327,6 +302,31 @@ mychoice = {
         p = Popen(['sudo', '-S'] + command, stdin=PIPE, stderr=PIPE, universal_newlines=True)
         LOGGER.info("Stopping speech-client")
 	self.handle_trivia_intent()
+
+    mychoice = {
+    'ONE': one,
+    'TWO': two,
+    'THREE': three,
+    'FOUR': four,
+    'FIVE': invalid,
+    'SIX': invalid,
+    'SEVEN': invalid,
+    'EIGHT': invalid,
+    'NINE': invalid,
+    'TEN': invalid,
+    'REPEAT': repeat,
+    'STOP': askstop,
+    'PAUZE': askstop,
+    'END': askstop,
+    'START': start,
+    'QUIT': askstop,
+    'NEVER': invalid,
+    'MIND': invalid,
+    'HELP': help,
+    'PLAY': start,
+    'YES': yes,
+    'NO': no
+    }
 
 def create_skill():
       return LsttSkill()
