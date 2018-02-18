@@ -27,30 +27,6 @@ LOGGER = getLogger(__name__)
 
 validmc = [ '1', '2', '3', '4']
 score = 0
-mychoice = {
-'ONE': one,
-'TWO': two,
-'THREE': three,
-'FOUR': four,
-'FIVE': invalid,
-'SIX': invalid,
-'SEVEN': invalid,
-'EIGHT': invalid,
-'NINE': invalid,
-'TEN': invalid,
-'REPEAT': repeat,
-'STOP': askstop,
-'PAUZE': askstop,
-'END': askstop,
-'START': start,
-'QUIT': askstop,
-'NEVER': invalid,
-'MIND': invalid,
-'HELP': help,
-'PLAY': start,
-'YES': yes,
-'NO': no
-}
 
 config = ConfigurationManager.get()
 ERROR_HANDLER_FUNC = CFUNCTYPE(None, c_char_p, c_int, c_char_p, c_int, c_char_p)
@@ -120,6 +96,31 @@ class LsttSkill(MycroftSkill):
 	
     def no():
         return "no"
+
+mychoice = {
+'ONE': one,
+'TWO': two,
+'THREE': three,
+'FOUR': four,
+'FIVE': invalid,
+'SIX': invalid,
+'SEVEN': invalid,
+'EIGHT': invalid,
+'NINE': invalid,
+'TEN': invalid,
+'REPEAT': repeat,
+'STOP': askstop,
+'PAUZE': askstop,
+'END': askstop,
+'START': start,
+'QUIT': askstop,
+'NEVER': invalid,
+'MIND': invalid,
+'HELP': help,
+'PLAY': start,
+'YES': yes,
+'NO': no
+}
 
     def wsnotify(self, msg):
         uri = 'ws://localhost:8181/core'
