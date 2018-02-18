@@ -56,29 +56,34 @@ class LsttSkill(MycroftSkill):
 	
     def invalid(self):
         self.speak("I did not understand you.")
-	self.runpocketsphinx("Please choose 1, 2, 3 or 4.", False, validmc)
-            
+	p = self.runpocketsphinx("Please choose 1, 2, 3 or 4.", False, validmc)
+        return p
+	
     def repeat(self):
         self.speak('I will repeat the question')
         wait_while_speaking()
-        self.repeatquestion( self.settings.get('cat'), self.settings.get('question'), self.settings.get('answers'), self.settings.get('correct_answer'))
-    
+        p = self.repeatquestion( self.settings.get('cat'), self.settings.get('question'), self.settings.get('answers'), self.settings.get('correct_answer'))
+        return p
+
     def askstop(self):
 	response = self.runpocketsphinx("Would you like to stop?", False, yesno)
 	if response == 'yes':
 	    self.endgame()
 	else:
-	    self.runpocketsphinx("Choose 1,2,3 or 4", False, validmc)
-
+	    p= self.runpocketsphinx("Choose 1,2,3 or 4", False, validmc)
+            return p
+	
     def help(self):
-	self.runpocketsphinx("I can not help you. What is your answer?", False, validmc)
-    
+	p = self.runpocketsphinx("I can not help you. What is your answer?", False, validmc)
+        return p
+
     def start(self):
 	response = self.runpocketsphinx("Would you like to restart?", False, yesno)
 	if response == yes:
 	    self.handle_trivia_intent()
 	else:
-	    self.runpocketsphinx("Choose 1,2,3 or 4", False, validmc)
+	    p = self.runpocketsphinx("Choose 1,2,3 or 4", False, validmc)
+            return p
 	
     def mychoice(self, x):
         try:
