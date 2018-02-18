@@ -54,49 +54,60 @@ class LsttSkill(MycroftSkill):
             require("LsttKeyword").build()
         self.register_intent(lstt_intent, self.handle_lstt_intent)
 	
-    def one():
-        return 1
-    
-    def two():
-        return 2
-    
-    def three():
-        return 3
-    
-    def four():
-        return 4
-    
-    def invalid():
+    def invalid(self):
         self.speak("I did not understand you.")
-	self.runpocketsphinx("Please choose 1, 2, 3 or 4.", False)
+	self.runpocketsphinx("Please choose 1, 2, 3 or 4.", False, validmc)
             
-    def repeat():
+    def repeat(self):
         self.speak('I will repeat the question')
         wait_while_speaking()
         self.repeatquestion( self.settings.get('cat'), self.settings.get('question'), self.settings.get('answers'), self.settings.get('correct_answer'))
     
-    def askstop():
-	response = self.runpocketsphinx("Would you like to stop?", False)
-	if response == yes:
+    def askstop(self):
+	response = self.runpocketsphinx("Would you like to stop?", False, yesno)
+	if response == 'yes':
 	    self.endgame()
 	else:
-	    self.runpocketsphinx("Choose 1,2,3 or 4", False)
+	    self.runpocketsphinx("Choose 1,2,3 or 4", False, validmc)
 
-    def help():
-	self.runpocketsphinx("I can not help you. What is your answer?", False)
+    def help(self):
+	self.runpocketsphinx("I can not help you. What is your answer?", False, validmc)
     
-    def start():
-	response = self.runpocketsphinx("Would you like to restart?", False)
+    def start(self):
+	response = self.runpocketsphinx("Would you like to restart?", False, yesno)
 	if response == yes:
 	    self.handle_trivia_intent()
 	else:
-	    self.runpocketsphinx("Choose 1,2,3 or 4", False)
+	    self.runpocketsphinx("Choose 1,2,3 or 4", False, validmc)
 	
-    def yes():
-        return "yes"
-	
-    def no():
-        return "no"
+    def mychoice(self, x):
+        try:
+            return {
+        'ONE': '1',
+        'TWO': '2',
+        'THREE': '3',
+        'FOUR': '4',
+        'FIVE': '5',
+        'SIX': '6',
+        'SEVEN': '7',
+        'EIGHT': '8',
+        'NINE': '9',
+        'TEN': '10',
+        'REPEAT': 'repeat',
+        'STOP': 'stop',
+        'PAUZE': 'pauze',
+        'END': 'stop',
+        'START': 'start',
+        'QUIT': 'stop',
+        'NEVER': 'invalid',
+        'MIND': 'invalid',
+        'HELP': 'help',
+        'PLAY': 'start',
+        'YES': 'yes',
+        'NO': 'no',
+            }[x]
+        except KeyError:
+            return 'invalid'
 
     def wsnotify(self, msg):
         uri = 'ws://localhost:8181/core'
@@ -125,7 +136,7 @@ class LsttSkill(MycroftSkill):
         LOGGER.info("Lsst - End Recording...")
         self.wsnotify('recognizer_loop:record_end')
 
-    def runpocketsphinx(self, msg, speakchoice=False):
+    def runpocketsphinx(self, msg, speakchoice, arr):
         self.speak(msg)
         wait_while_speaking()
         HOMEDIR = '/home/pi/'
@@ -157,17 +168,27 @@ class LsttSkill(MycroftSkill):
                         decoder.start_utt()
                         if utt.strip() != '':
                             self.handle_record_end()
-                            #print utt.strip()
+                            stream.stop_stream()
+                            stream.close()
+                            p.terminate()
                             reply = utt.strip().split(None, 1)[0]
 			    if speakchoice:
                                 self.speak( "Your answer is " + reply )
                                 wait_while_speaking()
-	                    selection = mychoice[reply]
-			    selection()
-                            stream.stop_stream()
-                            stream.close()
-                            p.terminate()
-                            #self.stop()
+	                    selection = self.mychoice(reply)
+                            if selection in arr:
+                                # Do the thing
+                                return selection
+                            elif selection == 'repeat':
+                                self.repeat()
+                            elif selection == 'stop':
+                                self.askstop()
+                            elif selection == 'help':
+                                self.help()
+                            elif selection == 'start':
+                                self.start()
+                            else:
+                                self.invalid()                            
                             break
             else:
                 break
@@ -229,7 +250,7 @@ class LsttSkill(MycroftSkill):
             i = i + 1
             self.speak(str(i) + ".    " + a)
             wait_while_speaking()
-        response = self.runpocketsphinx("Choose 1,2,3 or 4.", False)
+        response = self.runpocketsphinx("Choose 1,2,3 or 4.", False, validmc)
         #response = self.settings.get('myanswer')
         self.speak("Your choice is "+ str(response))
         return
@@ -241,7 +262,7 @@ class LsttSkill(MycroftSkill):
             i = i + 1
             self.speak(str(i) + ".    " + a)
             wait_while_speaking()
-        response = self.runpocketsphinx("Choose 1,2,3 or 4.", False)
+        response = self.runpocketsphinx("Choose 1,2,3 or 4.", False, validmc)
         #response = self.settings.get('myanswer')
         self.speak("Your choice is "+ str(response))
         wait_while_speaking()
@@ -304,30 +325,6 @@ class LsttSkill(MycroftSkill):
         LOGGER.info("Stopping speech-client")
 	self.handle_trivia_intent()
 
-    mychoice = {
-    'ONE': one,
-    'TWO': two,
-    'THREE': three,
-    'FOUR': four,
-    'FIVE': invalid,
-    'SIX': invalid,
-    'SEVEN': invalid,
-    'EIGHT': invalid,
-    'NINE': invalid,
-    'TEN': invalid,
-    'REPEAT': repeat,
-    'STOP': askstop,
-    'PAUZE': askstop,
-    'END': askstop,
-    'START': start,
-    'QUIT': askstop,
-    'NEVER': invalid,
-    'MIND': invalid,
-    'HELP': help,
-    'PLAY': start,
-    'YES': yes,
-    'NO': no
-    }
 
 def create_skill():
       return LsttSkill()
