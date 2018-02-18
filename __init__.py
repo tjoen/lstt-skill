@@ -232,10 +232,11 @@ class LsttSkill(MycroftSkill):
         return    
 
     def preparequestion(self, category, question, answers, right_answer):
-        self.enclosure.activate_mouth_events()
-        self.enclosure.mouth_reset()
+        #self.enclosure.activate_mouth_events()
+        #self.enclosure.mouth_reset()
         h = HTMLParser()
         quest = h.unescape( question )
+        self.enclosure.mouth_text( quest )
         time.sleep(1.5)
         self.speak("The category is "+ category+ ". " + quest )
         wait_while_speaking()
@@ -253,6 +254,7 @@ class LsttSkill(MycroftSkill):
     
     def repeatquestion(self, category, question, answers, right_answer):
         time.sleep(1)
+        self.enclosure.mouth_text( quest )
         self.speak("The category is "+category+". "+ question )
         wait_while_speaking()
         i=0
@@ -285,7 +287,7 @@ class LsttSkill(MycroftSkill):
         return 
 
     def endgame(self):
-        self.enclosure.deactivate_mouth_events()
+        #self.enclosure.deactivate_mouth_events()
         self.play( 'end.wav' )
         self.enclosure.mouth_text( "SCORE: "+str(score) )
         self.speak("You answered " +str(score)+ " questions correct")
@@ -295,10 +297,11 @@ class LsttSkill(MycroftSkill):
         self.stop()
     
     def handle_trivia_intent(self):
+        self.play( 'intro.wav' )
         self.enclosure.deactivate_mouth_events()
         # Display icon on faceplate
         self.enclosure.mouth_display("aIMAMAMPMPMPMAMAAPAPADAAIOIOAAAHAMAMAHAAIOIOAAAPAFAFAPAAMLMLAAAAAA", x=1, y=0, refresh=True)
-        time.sleep(2) 
+        time.sleep(1.5) 
         self.settings['cat'] = None
         self.settings['question'] = None
         self.settings['answers'] = None
@@ -312,12 +315,11 @@ class LsttSkill(MycroftSkill):
         questions = m['results'];
         global score
         score = 0
-        self.play( 'intro.wav' )
         self.speak("Okay, lets play a game of trivia. Get ready!")
         wait_while_speaking()
         for f in questions:
-            self.enclosure.activate_mouth_events()
-            self.enclosure.mouth_reset()
+            #self.enclosure.activate_mouth_events()
+            #self.enclosure.mouth_reset()
             self.preparequestion( f['category'], f['question'], f['incorrect_answers'], f['correct_answer'])
         self.endgame()
     
