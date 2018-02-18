@@ -147,9 +147,11 @@ class LsttSkill(MycroftSkill):
         self.wsnotify('recognizer_loop:record_end')
 
     def runpocketsphinx(self, msg, speakchoice, arr):
-        while self.settings.get('running'):
-            time.sleep(0.5)
+        while self.settings.get('running') == True:
+            LOGGER.info("Lsst - Running!")
+            time.sleep(1)
             if not self.settings.get('running'):
+                LOGGER.info("Lsst - Not running!")
                 break
 
         self.speak(msg)
