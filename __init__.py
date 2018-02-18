@@ -272,6 +272,7 @@ class LsttSkill(MycroftSkill):
         response = self.runpocketsphinx("Choose 1,2,3 or 4.", False, validmc)
         # response = self.settings.get('myanswer')
         # self.speak("Your choice is "+ str(response))
+        self.settings['myanswer'] = response
         return response
 
     def askquestion( self, category, quest, allanswers, correct_answer):
