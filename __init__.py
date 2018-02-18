@@ -26,6 +26,7 @@ __author__ = 'tjoen'
 LOGGER = getLogger(__name__)
 
 validmc = [ '1', '2', '3', '4']
+yesno = [ 'yes', 'no']
 score = 0
 
 config = ConfigurationManager.get()
@@ -66,8 +67,8 @@ class LsttSkill(MycroftSkill):
         return 4
     
     def invalid():
-        self.speak("I did not understand you there.")
-	self.runpocketsphinx("Choose 1,2,3 or 4", False)
+        self.speak("I did not understand you.")
+	self.runpocketsphinx("Please choose 1, 2, 3 or 4.", False)
             
     def repeat():
         self.speak('I will repeat the question')
