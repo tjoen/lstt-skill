@@ -39,11 +39,11 @@ mychoice = {
 'NINE': invalid,
 'TEN': invalid,
 'REPEAT': repeat,
-'STOP': stop,
-'PAUZE': pauze,
-'END': stop,
+'STOP': askstop,
+'PAUZE': askstop,
+'END': askstop,
 'START': start,
-'QUIT': stop,
+'QUIT': askstop,
 'NEVER': invalid,
 'MIND': invalid,
 'HELP': help,
@@ -78,44 +78,48 @@ class LsttSkill(MycroftSkill):
         self.register_intent(lstt_intent, self.handle_lstt_intent)
 	
     def one():
-        return "1"
+        return 1
     
     def two():
-        print "2"
+        return 2
     
     def three():
-        print "3"
+        return 3
     
     def four():
-        print "4"
+        return 4
     
     def invalid():
-        print "5 or more"
-    
+        self.speak("I did not understand you there.")
+	self.runpocketsphinx("Choose 1,2,3 or 4", False)
+            
     def repeat():
-        print "repeat"
+        self.speak('I will repeat the question')
+        wait_while_speaking()
+        self.repeatquestion( self.settings.get('cat'), self.settings.get('question'), self.settings.get('answers'), self.settings.get('correct_answer'))
     
-    #def stop():
-    #    print "stop"
-    #    exit()
-    
-    def pauze():
-        print "pauze"
-    
-    def cancel():
-        print "cancel"
+    def askstop():
+	response = self.runpocketsphinx("Would you like to stop?", False)
+	if response == yes:
+	    self.endgame()
+	else:
+	    self.runpocketsphinx("Choose 1,2,3 or 4", False)
 
     def help():
-        print "help"
+	self.runpocketsphinx("I can not help you. What is your answer?", False)
     
     def start():
-        print "start"
+	response = self.runpocketsphinx("Would you like to restart?", False)
+	if response == yes:
+	    self.handle_trivia_intent()
+	else:
+	    self.runpocketsphinx("Choose 1,2,3 or 4", False)
 	
     def yes():
-        print "start"
+        return "yes"
 	
     def no():
-        print "start"
+        return "no"
 
     def wsnotify(self, msg):
         uri = 'ws://localhost:8181/core'
@@ -144,8 +148,8 @@ class LsttSkill(MycroftSkill):
         LOGGER.info("Lsst - End Recording...")
         self.wsnotify('recognizer_loop:record_end')
 
-    def runpocketsphinx(self):
-        self.speak("starting local speech client")
+    def runpocketsphinx(self, msg, speakchoice=False):
+        self.speak(msg)
         wait_while_speaking()
         HOMEDIR = '/home/pi/'
         config = Decoder.default_config()
@@ -178,15 +182,15 @@ class LsttSkill(MycroftSkill):
                             self.handle_record_end()
                             #print utt.strip()
                             reply = utt.strip().split(None, 1)[0]
-                            self.speak( "you said " + reply )
-                            wait_while_speaking()
-                            #print(reply)
-                            #selection = mychoice[reply]
+			    if speakchoice:
+                                self.speak( "Your answer is " + reply )
+                                wait_while_speaking()
+	                    selection = mychoice[reply]
+			    selection()
                             stream.stop_stream()
                             stream.close()
                             p.terminate()
-                            self.stop()
-                            #selection()
+                            #self.stop()
                             break
             else:
                 break
@@ -248,9 +252,9 @@ class LsttSkill(MycroftSkill):
             i = i + 1
             self.speak(str(i) + ".    " + a)
             wait_while_speaking()
-        #ans = ans+("|"+str(i)+"|"+a)
-        #self.enclosure.mouth_text( ans )
-        self.getinput()
+        response = self.runpocketsphinx("Choose 1,2,3 or 4.", False)
+        #response = self.settings.get('myanswer')
+        self.speak("Your choice is "+ str(response))
         return
 
     def askquestion( self, category, quest, allanswers, correct_answer):
@@ -260,10 +264,8 @@ class LsttSkill(MycroftSkill):
             i = i + 1
             self.speak(str(i) + ".    " + a)
             wait_while_speaking()
-            #ans = ans+("|"+str(i)+">"+a)
-        #self.enclosure.mouth_text( ans )
-        self.getinput()
-        response = self.settings.get('myanswer')
+        response = self.runpocketsphinx("Choose 1,2,3 or 4.", False)
+        #response = self.settings.get('myanswer')
         self.speak("Your choice is "+ str(response))
         wait_while_speaking()
         self.enclosure.deactivate_mouth_events()
@@ -272,8 +274,48 @@ class LsttSkill(MycroftSkill):
         else:
             self.wrong(correct_answer)
         return 
-	
+
+    def endgame(self):
+        self.enclosure.deactivate_mouth_events()
+        self.play( 'end.wav' )
+        self.enclosure.mouth_text( "SCORE: "+str(score) )
+        self.speak("You answered " +str(score)+ " questions correct")
+        wait_while_speaking()
+        self.speak("Thanks for playing!")
+        wait_while_speaking()
+        self.stop()
+    
+    def handle_trivia_intent(self):
+        self.enclosure.deactivate_mouth_events()
+        # Display icon on faceplate
+        self.enclosure.mouth_display("aIMAMAMPMPMPMAMAAPAPADAAIOIOAAAHAMAMAHAAIOIOAAAPAFAFAPAAMLMLAAAAAA", x=1, y=0, refresh=True)
+        time.sleep(2) 
+        self.settings['cat'] = None
+        self.settings['question'] = None
+        self.settings['answers'] = None
+        self.settings['myanswer'] = None
+        self.settings['correct_answer'] = None
+        self.settings['resdir'] = '/opt/mycroft/skills/skill-trivia/res/'
+        url = "https://opentdb.com/api.php?amount=5&type=multiple"
+        headers = {'Accept': 'text/plain'}
+        r = requests.get(url, headers)
+        m = json.loads(r.text)
+        questions = m['results'];
+        global score
+        score = 0
+        self.play( 'intro.wav' )
+        self.speak("Okay, lets play a game of trivia. Get ready!")
+        wait_while_speaking()
+        for f in questions:
+            self.enclosure.activate_mouth_events()
+            self.enclosure.mouth_reset()
+            self.preparequestion( f['category'], f['question'], f['incorrect_answers'], f['correct_answer'])
+        self.endgame()
+    
     def stop(self):
+        self.enclosure.activate_mouth_events()
+        self.enclosure.mouth_reset()
+        self.enclosure.reset()    
         command = 'service mycroft-speech-client start'.split()
         p = Popen(['sudo', '-S'] + command, stdin=PIPE, stderr=PIPE, universal_newlines=True)
         LOGGER.info("Starting speech-client" )
@@ -283,7 +325,7 @@ class LsttSkill(MycroftSkill):
         command = 'service mycroft-speech-client start'.split()
         p = Popen(['sudo', '-S'] + command, stdin=PIPE, stderr=PIPE, universal_newlines=True)
         LOGGER.info("Stopping speech-client")
-        self.runpocketsphinx()
+	self.handle_trivia_intent()
 
 def create_skill():
       return LsttSkill()
