@@ -3,21 +3,21 @@ This skill starts a game of general trivia.
 
 ## Description 
 At the moment, the skill will ask you 5 questions. You can answer by choosing 1,2,3 or 4.
-This has a pocketspinx STT with a small dict.
-Install the dict in your homedir from here: https://github.com/tjoen/local-stt-test
+Yes, No, Stop, Repeat and Start should also work.
 
+This has uses mycrofts HMM from pocketsphinx STT with a small dict.
+Copy localstt.dic	and localstt.lm to your homedir from here: https://github.com/tjoen/local-stt-test
 
 ## Current state
 Working features:
-- play trivia
-- let's play trivia
-- game of trivia
+- this version untested
 
 ## Known issues:
-test skill
+test skill, work in progress
 
 ## Examples 
-* "Hey Mycroft, let's play trivia"
+* "Hey Mycroft, start local speech"
+* "Hey Mycroft, local speech test"
 
 ## Credits 
 Theun Kohlbeck, https://github.com/tjoen
