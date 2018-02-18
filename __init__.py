@@ -295,7 +295,7 @@ class LsttSkill(MycroftSkill):
         self.settings['answers'] = None
         self.settings['myanswer'] = None
         self.settings['correct_answer'] = None
-        self.settings['resdir'] = '/opt/mycroft/skills/skill-trivia/res/'
+        self.settings['resdir'] = '/opt/mycroft/skills/lstt-skill/res/'
         url = "https://opentdb.com/api.php?amount=5&type=multiple"
         headers = {'Accept': 'text/plain'}
         r = requests.get(url, headers)
