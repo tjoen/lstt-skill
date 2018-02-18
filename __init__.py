@@ -278,7 +278,7 @@ class LsttSkill(MycroftSkill):
         self.speak("Your choice is "+ str(response2))
         wait_while_speaking()
         self.enclosure.deactivate_mouth_events()
-        if correct_answer == allanswers[int(response)-1]:
+        if correct_answer == allanswers[int(response2)-1]:
             self.right()
         else:
             self.wrong(correct_answer)
