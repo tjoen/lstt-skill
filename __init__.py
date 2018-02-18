@@ -297,17 +297,17 @@ class LsttSkill(MycroftSkill):
         self.stop()
     
     def handle_trivia_intent(self):
-        self.play( 'intro.wav' )
-        self.enclosure.deactivate_mouth_events()
-        # Display icon on faceplate
-        self.enclosure.mouth_display("aIMAMAMPMPMPMAMAAPAPADAAIOIOAAAHAMAMAHAAIOIOAAAPAFAFAPAAMLMLAAAAAA", x=1, y=0, refresh=True)
-        time.sleep(1.5) 
         self.settings['cat'] = None
         self.settings['question'] = None
         self.settings['answers'] = None
         self.settings['myanswer'] = None
         self.settings['correct_answer'] = None
         self.settings['resdir'] = '/opt/mycroft/skills/lstt-skill/res/'
+        self.play( 'intro.wav' )
+        self.enclosure.deactivate_mouth_events()
+        # Display icon on faceplate
+        self.enclosure.mouth_display("aIMAMAMPMPMPMAMAAPAPADAAIOIOAAAHAMAMAHAAIOIOAAAPAFAFAPAAMLMLAAAAAA", x=1, y=0, refresh=True)
+        time.sleep(1.5) 
         url = "https://opentdb.com/api.php?amount=5&type=multiple"
         headers = {'Accept': 'text/plain'}
         r = requests.get(url, headers)
