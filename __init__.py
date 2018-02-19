@@ -241,7 +241,7 @@ class LsttSkill(MycroftSkill):
     def preparequestion(self, category, question, answers, right_answer):
         h = HTMLParser()
         quest = h.unescape( question )
-        self.say("The category is "+ category+ ".)
+        self.say("The category is "+ category+ ".")
         correct_answer = h.unescape( right_answer )
         allanswers = list()
         allanswers.append(h.unescape(right_answer))
