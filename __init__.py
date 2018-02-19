@@ -161,7 +161,7 @@ class LsttSkill(MycroftSkill):
         self.wsnotify('recognizer_loop:record_end')
 
     def runpocketsphinx(self, msg, speakchoice, arr):
-        self.enclosure.activate_mouth_events()
+        self.enclosure.mouth_text( arr )
         self.say(msg)
         HOMEDIR = self.settings.get('resdir')
         config = Decoder.default_config()
@@ -195,7 +195,6 @@ class LsttSkill(MycroftSkill):
                             stream.stop_stream()
                             stream.close()
                             p.terminate()
-                            self.enclosure.deactivate_mouth_events()
                             reply = utt.strip().split(None, 1)[0]
 			    if speakchoice:
                                 self.say( "Your answer is " + reply )
