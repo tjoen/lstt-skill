@@ -161,7 +161,7 @@ class LsttSkill(MycroftSkill):
         self.wsnotify('recognizer_loop:record_end')
 
     def runpocketsphinx(self, msg, speakchoice, arr):
-        self.enclosure.mouth_text( *arr )
+        self.enclosure.mouth_text( ' | '.join(arr) )
         self.say(msg)
         HOMEDIR = self.settings.get('resdir')
         config = Decoder.default_config()
@@ -241,7 +241,7 @@ class LsttSkill(MycroftSkill):
     def preparequestion(self, category, question, answers, right_answer):
         h = HTMLParser()
         quest = h.unescape( question )
-        self.say("The category is "+ category+ ". " + quest )
+        self.say("The category is "+ category+ ".)
         correct_answer = h.unescape( right_answer )
         allanswers = list()
         allanswers.append(h.unescape(right_answer))
@@ -265,6 +265,7 @@ class LsttSkill(MycroftSkill):
     def askquestion( self, category, quest, allanswers, correct_answer):
         i=0
         self.enclosure.mouth_text( "?   ?   ?   ?   ?   ?   ?   ?   ?   ?   ?" )
+        self.say( quest )
         for a in allanswers:
             i = i + 1
             self.say(str(i) + ".    " + a)
