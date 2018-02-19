@@ -271,7 +271,7 @@ class LsttSkill(MycroftSkill):
             self.say(str(i) + ".    " + a)
         self.runpocketsphinx("Choose 1,2,3 or 4.", False, validmc)
         response2 = self.settings.get('myanswer')
-        self.say("Your answer is "+ allanswers[int(response2)-1])
+        self.say("Your answer is "+ str(response2))
         if correct_answer == allanswers[int(response2)-1]:
             self.right()
         else:
