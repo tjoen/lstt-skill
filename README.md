@@ -2,7 +2,7 @@
 This skill starts a game of general trivia with local speech-to-text.
 
 ## Description 
-At the moment, the skill will ask you 5 questions. You can answer by choosing 1,2,3 or 4.
+At the moment, the skill will ask you 3 "general knowledge" questions. You can answer by choosing 1,2,3 or 4.
 Yes, No, Stop, Repeat and Start should also work.
 
 This testskill uses mycrofts pocketsphinx STT with a small dict.
