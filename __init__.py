@@ -14,7 +14,6 @@ from pocketsphinx.pocketsphinx import *
 from sphinxbase.sphinxbase import *
 from HTMLParser import HTMLParser
 from websocket import create_connection
-import tempfile
 import requests
 import json
 import random
@@ -126,10 +125,7 @@ class LsttSkill(MycroftSkill):
 
     def play(self,filename):
         cmd = ['aplay', str(filename)]
-        with tempfile.TemporaryFile() as f:
-            subprocess.call(cmd, stdout=f, stderr=f)
-            f.seek(0)
-            output = f.read()
+        subprocess.call(cmd)
 
     def wsnotify(self, msg):
         uri = 'ws://localhost:8181/core'
