@@ -238,7 +238,6 @@ class LsttSkill(MycroftSkill):
         self.enclosure.mouth_reset()
         h = HTMLParser()
         quest = h.unescape( question )
-        time.sleep(1.5)
         self.say("The category is "+ category+ ". " + quest )
         correct_answer = h.unescape( right_answer )
         allanswers = list()
@@ -253,15 +252,14 @@ class LsttSkill(MycroftSkill):
         self.askquestion( category, quest, allanswers, correct_answer )
     
     def repeatquestion(self, category, question, answers, right_answer):
-        time.sleep(1)
-        self.say("The category is "+category+". "+ question )
+        self.say( question )
         i=0
         ans = ""
         for a in answers:
             i = i + 1
             self.say(str(i) + ".    " + a)
         response = self.runpocketsphinx("Choose 1,2,3 or 4.", False, validmc)
-        # response = self.settings.get('myanswer')
+        self.settings['myanswer'] = response
         # self.say("Your choice is "+ str(response))
         return response
 
@@ -293,7 +291,6 @@ class LsttSkill(MycroftSkill):
         self.enclosure.deactivate_mouth_events()
         # Display icon on faceplate
         self.enclosure.mouth_display("aIMAMAMPMPMPMAMAAPAPADAAIOIOAAAHAMAMAHAAIOIOAAAPAFAFAPAAMLMLAAAAAA", x=1, y=0, refresh=True)
-        time.sleep(2) 
         self.settings['cat'] = None
         self.settings['question'] = None
         self.settings['answers'] = None
