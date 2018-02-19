@@ -161,7 +161,7 @@ class LsttSkill(MycroftSkill):
         self.wsnotify('recognizer_loop:record_end')
 
     def runpocketsphinx(self, msg, speakchoice, arr):
-        self.enclosure.mouth_text( arr )
+        self.enclosure.mouth_text( *arr )
         self.say(msg)
         HOMEDIR = self.settings.get('resdir')
         config = Decoder.default_config()
