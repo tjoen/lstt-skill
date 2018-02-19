@@ -27,6 +27,9 @@ LOGGER = getLogger(__name__)
 validmc = [ '1', '2', '3', '4']
 yesno = [ 'yes', 'no']
 score = 0
+right = ['Right!', 'That is correct', 'Yes, you are right', 'That is the right answer', 'Yes, good answer', 'Excellent choice']
+wrong = ['That is incorrect', 'Wrong answer', 'Sorry, you are wrong', 'That is not the right answer', 'You are wrong']
+
 
 config = ConfigurationManager.get()
 ERROR_HANDLER_FUNC = CFUNCTYPE(None, c_char_p, c_int, c_char_p, c_int, c_char_p)
@@ -62,6 +65,7 @@ class LsttSkill(MycroftSkill):
     def repeat(self):
         self.say('I will repeat the question')
         p = self.repeatquestion( self.settings.get('cat'), self.settings.get('question'), self.settings.get('answers'), self.settings.get('correct_answer'))
+	p = self.runpocketsphinx("Please choose 1, 2, 3 or 4.", False, validmc)
         self.settings['myanswer'] = p
         return p
 
@@ -118,7 +122,7 @@ class LsttSkill(MycroftSkill):
 
     def say(self, text):
         self.wsnotify('recognizer_loop:audio_output_start')
-        cmd = ['mimic','--setf','int_f0_target_mean=85','--setf' 'duration_stretch=1.1','-t']
+        cmd = ['mimic','--setf','int_f0_target_mean=107','--setf' 'duration_stretch=0.83','-t']
         cmd.append(text)
         call(cmd)
         self.wsnotify('recognizer_loop:audio_output_end')
@@ -221,9 +225,8 @@ class LsttSkill(MycroftSkill):
 
     def wrong(self, right_answer):
         self.enclosure.mouth_text( "WRONG!" )
-        self.say("Sorry, that is the wrong answer.")
         self.playsmpl( self.settings.get('resdir')+'false.wav' )
-        self.say("The answer is "+right_answer)
+        self.say("Wrong. The answer is "+right_answer)
         return
 
     def right(self):
@@ -234,8 +237,6 @@ class LsttSkill(MycroftSkill):
         return    
 
     def preparequestion(self, category, question, answers, right_answer):
-        self.enclosure.activate_mouth_events()
-        self.enclosure.mouth_reset()
         h = HTMLParser()
         quest = h.unescape( question )
         self.say("The category is "+ category+ ". " + quest )
@@ -254,14 +255,10 @@ class LsttSkill(MycroftSkill):
     def repeatquestion(self, category, question, answers, right_answer):
         self.say( question )
         i=0
-        ans = ""
         for a in answers:
             i = i + 1
             self.say(str(i) + ".    " + a)
-        response = self.runpocketsphinx("Choose 1,2,3 or 4.", False, validmc)
-        self.settings['myanswer'] = response
-        # self.say("Your choice is "+ str(response))
-        return response
+        return
 
     def askquestion( self, category, quest, allanswers, correct_answer):
         i=0
@@ -272,7 +269,6 @@ class LsttSkill(MycroftSkill):
         response = self.runpocketsphinx("Choose 1,2,3 or 4.", False, validmc)
         response2 = self.settings.get('myanswer')
         self.say("Your choice is "+ str(response2))
-        self.enclosure.deactivate_mouth_events()
         if correct_answer == allanswers[int(response)-1]:
             self.right()
         else:
@@ -280,11 +276,10 @@ class LsttSkill(MycroftSkill):
         return 
 
     def endgame(self):
-        self.enclosure.deactivate_mouth_events()
-        self.playsmpl( self.settings.get('resdir')+'end.wav' )
         self.enclosure.mouth_text( "SCORE: "+str(score) )
         self.say("You answered " +str(score)+ " questions correct")
         self.say("Thanks for playing!")
+        self.playsmpl( self.settings.get('resdir')+'end.wav' )
         self.stop()
     
     def handle_trivia_intent(self):
@@ -307,8 +302,6 @@ class LsttSkill(MycroftSkill):
         self.playsmpl( self.settings.get('resdir')+'intro.wav' )
         self.say("Okay, lets play a game of trivia. Get ready!")
         for f in questions:
-            self.enclosure.activate_mouth_events()
-            self.enclosure.mouth_reset()
             self.preparequestion( f['category'], f['question'], f['incorrect_answers'], f['correct_answer'])
         self.endgame()
     
