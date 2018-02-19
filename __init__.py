@@ -163,7 +163,7 @@ class LsttSkill(MycroftSkill):
     def runpocketsphinx(self, msg, speakchoice, arr):
         self.enclosure.activate_mouth_events()
         self.say(msg)
-        HOMEDIR = '/home/pi/'
+        HOMEDIR = self.settings.get('resdir')
         config = Decoder.default_config()
         config.set_string('-hmm', '/usr/local/lib/python2.7/site-packages/mycroft_core-0.9.17-py2.7.egg/mycroft/client/speech/recognizer/model/en-us/hmm')
         config.set_string('-lm', path.join(HOMEDIR, 'localstt.lm'))
