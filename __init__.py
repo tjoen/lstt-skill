@@ -118,7 +118,7 @@ class LsttSkill(MycroftSkill):
 
     def say(self, text):
         self.wsnotify('recognizer_loop:audio_output_start')
-        cmd = ['mimic','--setf','int_f0_target_mean=85','--setf' 'duration_stretch=1.2','-t']
+        cmd = ['mimic','--setf','int_f0_target_mean=85','--setf' 'duration_stretch=1.1','-t']
         cmd.append(text)
         call(cmd)
         self.wsnotify('recognizer_loop:audio_output_end')
