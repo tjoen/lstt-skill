@@ -161,6 +161,7 @@ class LsttSkill(MycroftSkill):
         self.wsnotify('recognizer_loop:record_end')
 
     def runpocketsphinx(self, msg, speakchoice, arr):
+        self.enclosure.activate_mouth_events()
         self.say(msg)
         HOMEDIR = '/home/pi/'
         config = Decoder.default_config()
@@ -194,6 +195,7 @@ class LsttSkill(MycroftSkill):
                             stream.stop_stream()
                             stream.close()
                             p.terminate()
+                            self.enclosure.deactivate_mouth_events()
                             reply = utt.strip().split(None, 1)[0]
 			    if speakchoice:
                                 self.say( "Your answer is " + reply )
@@ -225,13 +227,14 @@ class LsttSkill(MycroftSkill):
 
     def wrong(self, right_answer):
         self.enclosure.mouth_text( "WRONG!" )
+	self.say(random.choice(wrong))
         self.playsmpl( self.settings.get('resdir')+'false.wav' )
-        self.say("Wrong. The answer is "+right_answer)
+        self.say("The answer is "+right_answer)
         return
 
     def right(self):
         self.enclosure.mouth_text( "CORRECT!" )
-        self.say("That is the right answer")
+        self.say(random.choice(right))
         self.playsmpl( self.settings.get('resdir')+'true.wav' )
         self.score(1)
         return    
@@ -266,10 +269,10 @@ class LsttSkill(MycroftSkill):
         for a in allanswers:
             i = i + 1
             self.say(str(i) + ".    " + a)
-        response = self.runpocketsphinx("Choose 1,2,3 or 4.", False, validmc)
+        self.runpocketsphinx("Choose 1,2,3 or 4.", False, validmc)
         response2 = self.settings.get('myanswer')
-        self.say("Your choice is "+ str(response2))
-        if correct_answer == allanswers[int(response)-1]:
+        self.say("Your answer is "+ allanswers[int(response2)-1])
+        if correct_answer == allanswers[int(response2)-1]:
             self.right()
         else:
             self.wrong(correct_answer)
