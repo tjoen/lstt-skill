@@ -1,3 +1,4 @@
+import sys
 from os.path import dirname
 from mycroft.skills.core import MycroftSkill
 from mycroft.skills.core import intent_handler, intent_file_handler
@@ -19,8 +20,6 @@ import json
 import random
 import time
 import pyaudio
-import sys
-
 
 __author__ = 'tjoen'
 
