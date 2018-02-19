@@ -6,7 +6,7 @@ from adapt.intent import IntentBuilder
 from mycroft.configuration import ConfigurationManager
 from mycroft.util import resolve_resource_file
 from mycroft.util.log import getLogger
-import subprocess
+from subprocess import Popen, PIPE, call
 from ctypes import *
 from contextlib import contextmanager
 from os import environ, path
@@ -120,13 +120,13 @@ class LsttSkill(MycroftSkill):
         self.wsnotify('recognizer_loop:audio_output_start')
         cmd = ['mimic','--setf','int_f0_target_mean=85','--setf' 'duration_stretch=1.2','-t']
         cmd.append(text)
-        subprocess.call(cmd)
+        call(cmd)
         self.wsnotify('recognizer_loop:audio_output_end')
 
     def playsmpl(self, filename):
         self.wsnotify('recognizer_loop:audio_output_start')
         cmd = ['aplay', str(filename)]
-        subprocess.call(cmd)
+        call(cmd)
         self.wsnotify('recognizer_loop:audio_output_end')
 
     def wsnotify(self, msg):
