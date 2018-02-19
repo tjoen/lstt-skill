@@ -295,7 +295,8 @@ class LsttSkill(MycroftSkill):
         self.settings['myanswer'] = None
         self.settings['correct_answer'] = None
         self.settings['resdir'] = '/opt/mycroft/skills/lstt-skill/res/'
-        url = "https://opentdb.com/api.php?amount=5&type=multiple"
+        #url = "https://opentdb.com/api.php?amount=5&type=multiple"
+	url = "https://opentdb.com/api.php?amount=3&category=9&type=multiple"
         headers = {'Accept': 'text/plain'}
         r = requests.get(url, headers)
         m = json.loads(r.text)
