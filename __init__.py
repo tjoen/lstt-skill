@@ -265,7 +265,7 @@ class LsttSkill(MycroftSkill):
 
     def askquestion( self, category, quest, allanswers, correct_answer):
         i=0
-        ans = ""
+        self.enclosure.mouth_text( "?   ?   ?   ?   ?   ?   ?   ?   ?   ?   ?" )
         for a in allanswers:
             i = i + 1
             self.say(str(i) + ".    " + a)
