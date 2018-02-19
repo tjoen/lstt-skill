@@ -123,9 +123,11 @@ class LsttSkill(MycroftSkill):
         subprocess.call(cmd)
         self.wsnotify('recognizer_loop:audio_output_end')
 
-    def play(self,filename):
+    def playsmpl(self, filename):
+        self.wsnotify('recognizer_loop:audio_output_start')
         cmd = ['aplay', str(filename)]
         subprocess.call(cmd)
+        self.wsnotify('recognizer_loop:audio_output_end')
 
     def wsnotify(self, msg):
         uri = 'ws://localhost:8181/core'
@@ -147,7 +149,7 @@ class LsttSkill(MycroftSkill):
             file = resolve_resource_file(
                 config.get('sounds').get('start_listening'))
             if file:
-                play(file)
+                self.playsmpl(file)
         self.wsnotify('recognizer_loop:record_begin')
 
     def handle_record_end(self):
@@ -220,14 +222,14 @@ class LsttSkill(MycroftSkill):
     def wrong(self, right_answer):
         self.enclosure.mouth_text( "WRONG!" )
         self.say("Sorry, that is the wrong answer.")
-        self.play( self.settings.get('resdir')+'false.wav' )
+        self.playsmpl( self.settings.get('resdir')+'false.wav' )
         self.say("The answer is "+right_answer)
         return
 
     def right(self):
         self.enclosure.mouth_text( "CORRECT!" )
         self.say("That is the right answer")
-        self.play( self.settings.get('resdir')+'true.wav' )
+        self.playsmpl( self.settings.get('resdir')+'true.wav' )
         self.score(1)
         return    
 
@@ -281,7 +283,7 @@ class LsttSkill(MycroftSkill):
 
     def endgame(self):
         self.enclosure.deactivate_mouth_events()
-        self.play( self.settings.get('resdir')+'end.wav' )
+        self.playsmpl( self.settings.get('resdir')+'end.wav' )
         self.enclosure.mouth_text( "SCORE: "+str(score) )
         self.say("You answered " +str(score)+ " questions correct")
         self.say("Thanks for playing!")
@@ -305,7 +307,7 @@ class LsttSkill(MycroftSkill):
         questions = m['results'];
         global score
         score = 0
-        self.play( self.settings.get('resdir')+'intro.wav' )
+        self.playsmpl( self.settings.get('resdir')+'intro.wav' )
         self.say("Okay, lets play a game of trivia. Get ready!")
         for f in questions:
             self.enclosure.activate_mouth_events()
