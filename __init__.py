@@ -315,7 +315,7 @@ class LsttSkill(MycroftSkill):
         self.enclosure.deactivate_mouth_events()
         # Display icon on faceplate
         self.enclosure.mouth_display("aIMAMAMPMPMPMAMAAPAPADAAIOIOAAAHAMAMAHAAIOIOAAAPAFAFAPAAMLMLAAAAAA", x=1, y=0, refresh=True)
-        time.sleep(1.5) 
+        time.sleep(2) 
         url = "https://opentdb.com/api.php?amount=5&type=multiple"
         headers = {'Accept': 'text/plain'}
         r = requests.get(url, headers)
