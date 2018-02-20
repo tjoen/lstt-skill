@@ -14,7 +14,7 @@ Yes, No, Stop, Repeat and Start should also work.
 This started out as an experiment, checking if a faster method could make the  game more playable. 
 And it actually does seem to work pretty good. 
 
-Problem might be translations, but in this cas the questions are in english already. 
+Translations might be a problem with this method, but in this skill the questions from opentrviadb are in english already. 
 
 
 
