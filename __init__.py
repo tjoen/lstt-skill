@@ -6,7 +6,7 @@ from adapt.intent import IntentBuilder
 from mycroft.configuration import ConfigurationManager
 from mycroft.util import resolve_resource_file
 from mycroft.util.log import getLogger
-from subprocess import Popen, PIPE, call
+from subprocess import Popen, PIPE, check_output
 from ctypes import *
 from contextlib import contextmanager
 from os import environ, path
@@ -124,15 +124,14 @@ class LsttSkill(MycroftSkill):
         self.wsnotify('recognizer_loop:audio_output_start')
         cmd = ['mimic','--setf','int_f0_target_mean=107','--setf' 'duration_stretch=0.83','-t']
         cmd.append(text)
-        p = subprocess.Popen(cmd)
+        p = Popen(cmd)
 	p.wait()
         self.wsnotify('recognizer_loop:audio_output_end')
 
     def playsmpl(self, filename):
         self.wsnotify('recognizer_loop:audio_output_start')
         cmd = ['aplay', str(filename)]
-        call(cmd)
-	p = subprocess.Popen(cmd)
+	p = Popen(cmd)
         self.wsnotify('recognizer_loop:audio_output_end')
 
     def wsnotify(self, msg):
@@ -169,7 +168,7 @@ class LsttSkill(MycroftSkill):
         config = Decoder.default_config()
 	# get mycroft location for hmm model
         cmd = 'pip show mycroft_core | grep Location'
-        reply = subprocess.check_output(cmd, shell=True) 
+        reply = check_output(cmd, shell=True) 
         location = reply .split()[1]+'/mycroft/client/speech/recognizer/model/en-us/hmm/'
         config.set_string('-hmm', location)
         config.set_string('-lm', path.join(HOMEDIR, 'localstt.lm'))
