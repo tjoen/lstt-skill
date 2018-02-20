@@ -7,12 +7,12 @@ Yes, No, Stop, Repeat and Start should also work.
 
 This testskill uses mycrofts pocketsphinx STT with a small dict.
 
-It uses a localstt.dic (dictionairy) and localstt.lm (language model) in the res folder.
+It uses a localstt.dic (dictionary) and localstt.lm (language model) in the res folder.
 
 ## Current state
 Working features:
-- Version seems to work, very messy
-- great improvement on speech results.
+- Version seems to work fine, the skill disables the speechclient and audio service during playing
+- great speed improvement on speech results.
 
 ## Known issues:
 It's a test skill, so work in progress
