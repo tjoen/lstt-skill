@@ -190,7 +190,7 @@ class LsttSkill(MycroftSkill):
                             p.terminate()
                             reply = utt.strip().split(None, 1)[0]
 			    if speakchoice:
-                                self.say( "Your answer is " + reply + " to function "+self.mychoice(reply) )
+                                self.say( "Your answer is " + reply )
 	                    selection = self.mychoice(reply)
                             if selection in arr:
                                 # Do the thing
@@ -262,7 +262,7 @@ class LsttSkill(MycroftSkill):
         for a in allanswers:
             i = i + 1
             self.say(str(i) + ".    " + a)
-        self.runpocketsphinx("Choose 1,2,3 or 4.", True, validmc)
+        self.runpocketsphinx("Choose 1,2,3 or 4.", False, validmc)
         response2 = self.settings.get('myanswer')
         self.say("Your answer is "+ str(response2))
         if correct_answer == allanswers[int(response2)-1]:
