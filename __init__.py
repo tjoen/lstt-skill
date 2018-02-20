@@ -167,7 +167,11 @@ class LsttSkill(MycroftSkill):
         self.say(msg)
         HOMEDIR = self.settings.get('resdir')
         config = Decoder.default_config()
-        config.set_string('-hmm', '/usr/local/lib/python2.7/site-packages/mycroft_core-0.9.17-py2.7.egg/mycroft/client/speech/recognizer/model/en-us/hmm')
+	# get mycroft location for hmm model
+        cmd = 'pip show mycroft_core | grep Location'
+        reply = subprocess.check_output(cmd, shell=True) 
+        location = reply .split()[1]+'/mycroft/client/speech/recognizer/model/en-us/hmm/'
+        config.set_string('-hmm', location)
         config.set_string('-lm', path.join(HOMEDIR, 'localstt.lm'))
         config.set_string('-dict', path.join(HOMEDIR, 'localstt.dic'))
         config.set_string('-logfn', '/dev/null')
