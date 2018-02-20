@@ -1,4 +1,4 @@
-## Trivia skill with local stt - WIP
+## Trivia skill with local stt
 This skill starts a game of general trivia with local speech-to-text.
 
 ## Description 
