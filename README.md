@@ -7,7 +7,7 @@ Yes, No, Stop, Repeat and Start should also work.
 
 This testskill uses mycrofts pocketsphinx STT with a small dict.
 
-Needs localstt.dic and localstt.lm in your /home/pi/ from here: https://github.com/tjoen/local-stt-test
+It uses a localstt.dic (dictionairy) and localstt.lm (language model) in the res folder.
 
 ## Current state
 Working features:
