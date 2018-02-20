@@ -166,11 +166,7 @@ class LsttSkill(MycroftSkill):
         self.say(msg)
         HOMEDIR = self.settings.get('resdir')
         config = Decoder.default_config()
-	# get mycroft location for hmm model
-        cmd = 'pip show mycroft_core | grep Location'
-        reply = check_output(cmd, shell=True) 
-        location = reply .split()[1]+'/mycroft/client/speech/recognizer/model/en-us/hmm/'
-        config.set_string('-hmm', location)
+        config.set_string('-hmm', self.settings.get('hmm'))
         config.set_string('-lm', path.join(HOMEDIR, 'localstt.lm'))
         config.set_string('-dict', path.join(HOMEDIR, 'localstt.dic'))
         config.set_string('-logfn', '/dev/null')
@@ -300,6 +296,10 @@ class LsttSkill(MycroftSkill):
         self.settings['myanswer'] = None
         self.settings['correct_answer'] = None
         self.settings['resdir'] = '/opt/mycroft/skills/lstt-skill/res/'
+        # get mycroft location for hmm model
+        cmd = 'pip show mycroft_core | grep Location'
+        reply = check_output(cmd, shell=True) 
+        self.settings['hmm'] = reply .split()[1]+'/mycroft/client/speech/recognizer/model/en-us/hmm/'
         #url = "https://opentdb.com/api.php?amount=5&type=multiple"
 	url = "https://opentdb.com/api.php?amount=3&category=9&type=multiple"
         headers = {'Accept': 'text/plain'}
