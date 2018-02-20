@@ -19,7 +19,8 @@ Could probably be much more efficient, and much cleaner.
 
 ## Examples 
 * "Hey Mycroft, start local speech"
-* "Hey Mycroft, local speech test"
+* "Hey Mycroft, play trivia"
+* "Hey Mycroft, game of trivia"
 
 ## Credits 
 Theun Kohlbeck, https://github.com/tjoen
