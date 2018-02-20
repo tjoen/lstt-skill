@@ -124,13 +124,15 @@ class LsttSkill(MycroftSkill):
         self.wsnotify('recognizer_loop:audio_output_start')
         cmd = ['mimic','--setf','int_f0_target_mean=107','--setf' 'duration_stretch=0.83','-t']
         cmd.append(text)
-        call(cmd)
+        p = subprocess.Popen(cmd)
+	p.wait()
         self.wsnotify('recognizer_loop:audio_output_end')
 
     def playsmpl(self, filename):
         self.wsnotify('recognizer_loop:audio_output_start')
         cmd = ['aplay', str(filename)]
         call(cmd)
+	p = subprocess.Popen(cmd)
         self.wsnotify('recognizer_loop:audio_output_end')
 
     def wsnotify(self, msg):
