@@ -11,11 +11,11 @@ It uses a localstt.dic (dictionary) and localstt.lm (language model) in the res 
 
 ## Current state
 Working features:
-- Version seems to work fine, the skill disables the speechclient and audio service during playing
+- Version seems to work fine, the skill disables the speechclient and audio service during the skill
 - great speed improvement on speech results.
 
 ## Known issues:
-It's a test skill, so work in progress
+Could probably be much more efficient, and much cleaner.
 
 ## Examples 
 * "Hey Mycroft, start local speech"
