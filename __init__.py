@@ -61,7 +61,7 @@ class LsttSkill(MycroftSkill):
             require("LsttKeyword").build()
         self.register_intent(lstt_intent, self.handle_lstt_intent)
 
-    def get_script_path():
+    def get_script_path(self):
         return os.path.dirname(os.path.realpath(sys.argv[0]))
 	
     def invalid(self):
@@ -315,7 +315,7 @@ class LsttSkill(MycroftSkill):
         self.settings['answers'] = None
         self.settings['myanswer'] = None
         self.settings['correct_answer'] = None
-        self.settings['resdir'] = get_script_path()+'/res/'
+        self.settings['resdir'] = self.get_script_path()+'/res/'
         # get mycroft location for hmm model
         cmd = 'pip show mycroft_core | grep Location'
         reply = check_output(cmd, shell=True) 
