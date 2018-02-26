@@ -17,7 +17,7 @@ And it actually does seem to work pretty good.
 
 Translations might be a problem with this method, but this skill uses questions in english. 
 [JarbasAI](https://github.com/JarbasAl) just made a very nice local luistener that will be implemented in the near future.
-[More info ob that here](https://github.com/JarbasAl/local_listener)
+[More info on that here](https://github.com/JarbasAl/local_listener)
 
 ## Current state
 Working features:
