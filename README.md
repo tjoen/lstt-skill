@@ -16,8 +16,8 @@ This started out as an experiment, checking if a faster method could make the  g
 And it actually does seem to work pretty good. 
 
 Translations might be a problem with this method, but this skill uses questions in english. 
-[https://github.com/JarbasAl](JarbasAI) just made a very nice local luistener that will be implemented in the near future.
-[https://github.com/JarbasAl/local_listener](more on that here)
+[JarbasAI](https://github.com/JarbasAl) just made a very nice local luistener that will be implemented in the near future.
+[More info ob that here](https://github.com/JarbasAl/local_listener)
 
 ## Current state
 Working features:
