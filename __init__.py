@@ -316,6 +316,7 @@ class LsttSkill(MycroftSkill):
         self.settings['myanswer'] = None
         self.settings['correct_answer'] = None
         self.settings['resdir'] = self.get_script_path()+'/res/'
+	print "lstt dir: " +self.settings.get('resdir')
         # get mycroft location for hmm model
         cmd = 'pip show mycroft_core | grep Location'
         reply = check_output(cmd, shell=True) 
