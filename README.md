@@ -21,7 +21,7 @@ Translations might be a problem with this method, but this skill uses questions 
 
 ## Current state
 Working features:
-- Version seems to work fine, the skill disables the speechclient and audio service during the skill
+- Version seems to work fine, the skill invokes naptime during the skill
 - great speed improvement on speech results.
 
 ## Known issues:
