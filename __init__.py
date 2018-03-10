@@ -7,7 +7,8 @@ from adapt.intent import IntentBuilder
 from mycroft.configuration import ConfigurationManager
 from mycroft.util import resolve_resource_file, play_wav
 from mycroft.util.log import getLogger
-from subprocess import Popen, PIPE, check_output
+from mycroft import MYCROFT_ROOT_PATH
+from subprocess import Popen, PIPE
 from HTMLParser import HTMLParser
 import requests
 import json
@@ -318,9 +319,7 @@ class LsttSkill(MycroftSkill):
         self.settings['resdir'] = '/opt/mycroft/skills/lstt-skill/res/'
 	print "lstt dir: " +self.settings.get('resdir')
         # get mycroft location for hmm model
-        cmd = 'pip show mycroft_core | grep Location'
-        reply = check_output(cmd, shell=True) 
-        self.settings['hmm'] = reply .split()[1]+'/mycroft/client/speech/recognizer/model/en-us/hmm/'
+        self.settings['hmm'] = MYCROFT_ROOT_PATH+'/mycroft/client/speech/recognizer/model/en-us/hmm/'
         #url = "https://opentdb.com/api.php?amount=5&type=multiple"
 	url = "https://opentdb.com/api.php?amount=3&type=multiple"
         headers = {'Accept': 'text/plain'}
