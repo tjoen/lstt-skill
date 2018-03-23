@@ -316,7 +316,7 @@ class LsttSkill(MycroftSkill):
         self.settings['answers'] = None
         self.settings['myanswer'] = None
         self.settings['correct_answer'] = None
-        self.settings['resdir'] = ''.join(abspath(dirname(__file__)), 'res')
+        self.settings['resdir'] = os.path.join(os.path.dirname(__file__), 'res')
 	print "lstt dir: " +self.settings.get('resdir')
         # get mycroft location for hmm model
         self.settings['hmm'] = MYCROFT_ROOT_PATH+'/mycroft/client/speech/recognizer/model/en-us/hmm/'
